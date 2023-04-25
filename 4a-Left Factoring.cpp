@@ -1,74 +1,59 @@
-#include <iostream>
-#include <math.h>
-#include <vector>
-#include <string>
-#include <stdlib.h>
+#include<iostream>
+#include<string>
 using namespace std;
-
 int main()
-{
-    cout<<"\nEnter number of productions: ";
-    int p;
-    cin>>p;
-    vector<string> prodleft(p),prodright(p);
-    cout<<"\nEnter productions one by one: ";
-    int i;
-    for(i=0;i<p;++i) {
-        cout<<"\nLeft of production "<<i+1<<": ";
-        cin>>prodleft[i];
-        cout<<"\nRight of production "<<i+1<<": ";
-        cin>>prodright[i];
+{  string ip,op1,op2,temp;
+    int sizes[10] = {};
+    char c;
+    int n,j,l;
+    cout<<"Enter the Parent Non-Terminal : ";
+    cin>>c;
+    ip.push_back(c);
+    op1 += ip + "\'->";
+    ip += "->";
+    op2+=ip;
+    cout<<"Enter the number of productions : ";
+    cin>>n;
+    for(int i=0;i<n;i++)
+    {   cout<<"Enter Production "<<i+1<<" : ";
+        cin>>temp;
+        sizes[i] = temp.size();
+        ip+=temp;
+        if(i!=n-1)
+            ip += "|";
     }
-    int j;  
-    int e=1;
-    for(i=0;i<p;++i) {
-        for(j=i+1;j<p;++j) {
-            if(prodleft[j]==prodleft[i]) {
-                int k=0;
-                string com="";
-                while(k<prodright[i].length()&&k<prodright[j].length()&&prodright[i][k]==prodright[j][k]) {
-                    com+=prodright[i][k];
-                    ++k;
-                }
-                if(k==0)
-                    continue;
-                char* buffer;
-                string comleft=prodleft[i];
-                if(k==prodright[i].length()) {
-                    prodleft[i]+=string(itoa(e,buffer,10));
-                    prodleft[j]+=string(itoa(e,buffer,10));
-                    prodright[i]="^";
-                    prodright[j]=prodright[j].substr(k,prodright[j].length()-k);
-                }
-                else if(k==prodright[j].length()) {
-                    prodleft[i]+=string(itoa(e,buffer,10));
-                    prodleft[j]+=string(itoa(e,buffer,10));
-                    prodright[j]="^";
-                    prodright[i]=prodright[i].substr(k,prodright[i].length()-k);
-                }
-                else {
-                    prodleft[i]+=string(itoa(e,buffer,10));
-                    prodleft[j]+=string(itoa(e,buffer,10));
-                    prodright[j]=prodright[j].substr(k,prodright[j].length()-k);
-                    prodright[i]=prodright[i].substr(k,prodright[i].length()-k);
-                }
-                int l;
-                for(l=j+1;l<p;++l) {
-                    if(comleft==prodleft[l]&&com==prodright[l].substr(0,fmin(k,prodright[l].length()))) {
-                        prodleft[l]+=string(itoa(e,buffer,10));
-                        prodright[l]=prodright[l].substr(k,prodright[l].length()-k);
-                    }
-                }
-                prodleft.push_back(comleft);
-                prodright.push_back(com+prodleft[i]);
-                ++p;
-                ++e;
+    cout<<"Production Rule : "<<ip<<endl;
+    for(int i=0,k=3;i<n;i++)
+    {
+        if(ip[0] == ip[k])
+        {
+            cout<<"Production "<<i+1<<" has left recursion."<<endl;
+            if(ip[k] != '#')
+            {
+                for(l=k+1;l<k+sizes[i];l++)
+                    op1.push_back(ip[l]);
+                k=l+1;
+                op1.push_back(ip[0]);
+                op1 += "\'|";
             }
         }
-    }
-    cout<<"\n\nNew productions";
-    for(i=0;i<p;++i) {
-        cout<<"\n"<<prodleft[i]<<"->"<<prodright[i];
-    }
-    return 0;
-}
+        else
+        {
+            cout<<"Production "<<i+1<<" does not have left recursion."<<endl;
+            if(ip[k] != '#')
+            {
+                for(j=k;j<k+sizes[i];j++)
+                    op2.push_back(ip[j]);
+                k=j+1;
+                op2.push_back(ip[0]);
+                op2 += "\'|";
+            }
+            else
+            {
+                op2.push_back(ip[0]);
+                op2 += "\'";
+            }}}
+    op1 += "#";
+    cout<<op2<<endl;
+    cout<<op1<<endl;
+    return 0;}
