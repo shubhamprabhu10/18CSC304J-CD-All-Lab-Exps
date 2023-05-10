@@ -5,7 +5,7 @@
 #include<stdlib.h>
 using namespace std;
 
-int vars,terms,i,j,k,m,rep,count,temp=-1;
+int vars,terms,i,j,k,m,rep,cont,temp=-1;
 char var[10],term[10],lead[10][10],trail[10][10];
 struct grammar
 {	
@@ -88,16 +88,16 @@ void trailing()
 	{
 		for(j=0;j<gram[i].prodno;j++)
 		{
-			count=0;
-			while(gram[i].rhs[j][count]!='\x0')
-				count++;
+			cont=0;
+			while(gram[i].rhs[j][cont]!='\x0')
+				cont++;
 			for(k=0;k<terms;k++)
 			{
-				if(gram[i].rhs[j][count-1]==term[k])
+				if(gram[i].rhs[j][cont-1]==term[k])
 					trail[i][k]=1;
 				else
 				{
-					if(gram[i].rhs[j][count-2]==term[k])
+					if(gram[i].rhs[j][cont-2]==term[k])
 						trail[i][k]=1;
 				}
 			}
@@ -109,12 +109,12 @@ void trailing()
 		{
 			for(j=0;j<gram[i].prodno;j++)
 			{
-				count=0;
-				while(gram[i].rhs[j][count]!='\x0')
-					count++;
+				cont=0;
+				while(gram[i].rhs[j][cont]!='\x0')
+					cont++;
 				for(m=1;m<vars;m++)
 				{
-					if(gram[i].rhs[j][count-1]==var[m])
+					if(gram[i].rhs[j][cont-1]==var[m])
 						temp=m;
 				}
 				for(k=0;k<terms;k++)
